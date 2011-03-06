@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:flexui="flexunit.flexui.*" creationComplete="onCreationComplete()" xmlns:adobe="http://www.adobe.com/2009/flexUnitUIRunner">
+	<fx:Script>
+		<![CDATA[
+			import mx.logging.LogEventLevel;
+			
+			import org.flexunit.internals.TextListener;
+			import org.flexunit.listeners.UIListener;
+			import org.flexunit.runner.FlexUnitCore;
+			import org.flexunit.runner.notification.async.XMLListener;
+			
+			protected var core:FlexUnitCore;
+			
+			public function currentRunTestSuite():Array
+			{
+				var testsToRun:Array = new Array();
+				testsToRun.push(SomeTest);
+				return testsToRun;
+			}
+			
+			private function onCreationComplete():void
+			{
+				core = new FlexUnitCore();
+				
+				//Listener fot the FlexUnit Results plugin
+				core.addListener(new XMLListener("FlexUnitTest"));
+				
+				//Listener for the UI
+				core.addListener(new UIListener(testRunner));
+				
+				//Listener for outputting to the trace console via the Flex logging class, Flex Only
+				core.addListener(TextListener.getDefaultTextListener(LogEventLevel.DEBUG));
+				
+				core.run(currentRunTestSuite());
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<adobe:TestRunnerBase id="testRunner"/>
+</s:Application>
